@@ -10,4 +10,7 @@ export default defineConfig({
       '@flowmap.gl/layers': path.resolve(__dirname, '../../packages/layers/src/index.ts'),
     },
   },
+  build: {
+    outDir: 'dist', // Specify the output directory for the build
+  },
 });
