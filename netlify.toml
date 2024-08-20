@@ -1,9 +1,5 @@
 [build]
   base = "examples/react-app" # Set this to the directory containing your React app
   publish = "examples/react-app/build" # Update this to your build output directory
-  command = "yarn && yarn build" # Install dependencies and build the project
+  command = "yarn start" # Install dependencies and build the project
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
