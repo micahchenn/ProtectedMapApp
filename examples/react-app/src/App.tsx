@@ -1,18 +1,12 @@
-/*
- * Copyright (c) Flowmap.gl contributors
- * Copyright (c) 2018-2020 Teralytics
- * SPDX-License-Identifier: Apache-2.0
- */
-
-import {ReactNode, useEffect, useState} from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import DeckGL from '@deck.gl/react';
 import {
   FlowmapLayer,
   FlowmapLayerPickingInfo,
   PickingType,
 } from '@flowmap.gl/layers';
-import {FlowmapData, getViewStateForLocations} from '@flowmap.gl/data';
-import {Map as ReactMapGl, ViewState as ViewportProps} from 'react-map-gl';
+import { FlowmapData, getViewStateForLocations } from '@flowmap.gl/data';
+import { Map as ReactMapGl, ViewState as ViewportProps } from 'react-map-gl';
 import {
   fetchData,
   FlowDatum,
@@ -22,21 +16,25 @@ import {
   useUI,
 } from '@flowmap.gl/examples-common';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import './App.css'; // Include custom styles here
 
 const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 const MAPBOX_STYLE_LIGHT = 'mapbox://styles/mapbox/streets-v11';
 const MAPBOX_STYLE_DARK = MAPBOX_STYLE_LIGHT;
 
 type TooltipState = {
-  position: {left: number; top: number};
+  position: { left: number; top: number };
   content: ReactNode;
 };
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
   const config = useUI(UI_INITIAL, initLilGui);
   const [viewState, setViewState] = useState<ViewportProps>();
   const [data, setData] = useState<FlowmapData<LocationDatum, FlowDatum>>();
   const [tooltip, setTooltip] = useState<TooltipState>();
+
   useEffect(() => {
     (async () => {
       setData(await fetchData(config.clusteringMethod));
@@ -49,7 +47,7 @@ function App() {
       const viewState = getViewStateForLocations(
         data.locations,
         (loc: LocationDatum) => [loc.lon, loc.lat],
-        [width, height],
+        [width, height]
       );
       setViewState({
         ...viewState,
@@ -61,10 +59,12 @@ function App() {
       });
     }
   }, [data]);
-  const handleViewStateChange = ({viewState}: any) => {
+
+  const handleViewStateChange = ({ viewState }: any) => {
     setViewState(viewState);
     setTooltip(undefined);
   };
+
   const layers = [];
   if (data) {
     layers.push(
@@ -98,26 +98,52 @@ function App() {
         onHover: (info) => setTooltip(getTooltipState(info)),
         onClick: (info) =>
           console.log('clicked', info.object?.type, info.object, info),
-      }),
+      })
     );
   }
+
+  const handleLogin = () => {
+    if (password === 'arcadis') {
+      setIsAuthenticated(true);
+    } else {
+      alert('Incorrect password');
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="login-container">
+        <div className="login-box">
+          <h1>Enter Password</h1>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+          />
+          <button onClick={handleLogin}>Login</button>
+        </div>
+      </div>
+    );
+  }
+
   if (!viewState) {
     return null;
   }
+
   return (
     <div
       className={`flowmap-container ${config.darkMode ? 'dark' : 'light'}`}
-      style={{position: 'relative'}}
+      style={{ position: 'relative' }}
     >
       <DeckGL
         width="100%"
         height="100%"
-        // viewState={viewState}
         initialViewState={viewState}
         onViewStateChange={handleViewStateChange}
         controller={true}
         layers={layers}
-        style={{mixBlendMode: config.darkMode ? 'screen' : 'darken'}}
+        style={{ mixBlendMode: config.darkMode ? 'screen' : 'darken' }}
       >
         <ReactMapGl
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
@@ -134,11 +160,11 @@ function App() {
 }
 
 function getTooltipState(
-  info: FlowmapLayerPickingInfo<LocationDatum, FlowDatum> | undefined,
+  info: FlowmapLayerPickingInfo<LocationDatum, FlowDatum> | undefined
 ): TooltipState | undefined {
   if (!info) return undefined;
-  const {x, y, object} = info;
-  const position = {left: x, top: y};
+  const { x, y, object } = info;
+  const position = { left: x, top: y };
   switch (object?.type) {
     case PickingType.LOCATION:
       return {
