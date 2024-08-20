@@ -1,4 +1,4 @@
 [build]
-base = "examples/react-app"
-publish = "dist"  # Correct this path based on your output
-command = "yarn build:all"
+  base = "examples/react-app"
+  publish = "dist"
+  command = "cd ../../packages/data && yarn build && cd ../layers && yarn build && cd ../../examples/react-app && yarn build"
