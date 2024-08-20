@@ -10,7 +10,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsc --watch",
-    "build": "rm -rf dist && tsc",
+    "build": "rimraf dist && tsc",
     "prepare": "yarn build"
   },
   "dependencies": {
