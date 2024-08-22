@@ -18,7 +18,7 @@ import {
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css'; // Include custom styles here
 
-const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibWljYWhjaGVuIiwiYSI6ImNtMDRyemlhNDBjZ2kya29wOTY4dW43aW8ifQ.JQUvZLICLE7ryTxNKAwLlQ';
 const MAPBOX_STYLE_LIGHT = 'mapbox://styles/mapbox/streets-v11';
 const MAPBOX_STYLE_DARK = MAPBOX_STYLE_LIGHT;
 
